@@ -1,0 +1,92 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Karla:wght@400;500;600;700&display=swap">
+  <style>
+    body { margin: 0; }
+  </style>
+</helmet>
+
+<div style="width: 412px; height: 620px; background: #FBF6EF; color: #2B2019; font-family: Karla, 'Helvetica Neue', Arial, sans-serif; display: flex; flex-direction: column; overflow: hidden; position: relative;">
+
+  <div style="height: 30px; flex-shrink: 0;"></div>
+
+  <div style="display: flex; align-items: center; justify-content: space-between; padding: 6px 20px 18px 20px; flex-shrink: 0;">
+    <div style="font-family: Newsreader, Georgia, serif; font-size: 26px; font-weight: 500; letter-spacing: -0.3px; line-height: 1;">Settings</div>
+    <div style="width: 36px; height: 36px; border-radius: 18px; background: #F2EAE0; display: flex; align-items: center; justify-content: center;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7C6A5D" stroke-width="2" stroke-linecap="round">
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+      </svg>
+    </div>
+  </div>
+
+  <div style="padding: 0 20px; display: flex; flex-direction: column; gap: 10px;">
+
+    <div style="font-size: 11.5px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; color: #7C6A5D;">Appearance</div>
+
+    <div style="background: #FFFFFF; border: 1px solid #E8DDD0; border-radius: 16px; overflow: hidden;">
+
+      <div style="display: flex; align-items: center; gap: 14px; padding: 14px;">
+        <div style="width: 44px; height: 44px; border-radius: 12px; border: 1px solid #E8DDD0; overflow: hidden; display: flex; flex-shrink: 0;">
+          <div style="flex-grow: 1; background: #FBF6EF; display: flex; align-items: center; padding: 0 5px;">
+            <div style="height: 4px; border-radius: 2px; background: #C0532B; width: 100%;"></div>
+          </div>
+          <div style="flex-grow: 1; background: #16120E; display: flex; align-items: center; padding: 0 5px;">
+            <div style="height: 4px; border-radius: 2px; background: #E4794B; width: 100%;"></div>
+          </div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 2px; flex-grow: 1;">
+          <div style="font-size: 15px; font-weight: 700;">Match my phone</div>
+          <div style="font-size: 12px; color: #7C6A5D;">Follows the Android light/dark setting</div>
+        </div>
+        <div style="width: 24px; height: 24px; border-radius: 12px; background: #C0532B; border: 1.5px solid #C0532B; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#FFF6F0" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="5,12.5 10,17.5 19,7"></polyline>
+          </svg>
+        </div>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 14px; padding: 14px; border-top: 1px solid #E8DDD0;">
+        <div style="width: 44px; height: 44px; border-radius: 12px; background: #FBF6EF; border: 1px solid #E8DDD0; display: flex; flex-direction: column; justify-content: center; gap: 5px; padding: 0 8px; flex-shrink: 0;">
+          <div style="height: 4px; border-radius: 2px; background: #C0532B;"></div>
+          <div style="height: 4px; border-radius: 2px; background: #A6968A; width: 60%;"></div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 2px; flex-grow: 1;">
+          <div style="font-size: 15px; font-weight: 500;">Light</div>
+          <div style="font-size: 12px; color: #7C6A5D;">Warm paper and ink</div>
+        </div>
+        <div style="width: 24px; height: 24px; border-radius: 12px; border: 1.5px solid #E8DDD0; flex-shrink: 0;"></div>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 14px; padding: 14px; border-top: 1px solid #E8DDD0;">
+        <div style="width: 44px; height: 44px; border-radius: 12px; background: #16120E; border: 1px solid #362C22; display: flex; flex-direction: column; justify-content: center; gap: 5px; padding: 0 8px; flex-shrink: 0;">
+          <div style="height: 4px; border-radius: 2px; background: #E4794B;"></div>
+          <div style="height: 4px; border-radius: 2px; background: #7A6A5C; width: 60%;"></div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 2px; flex-grow: 1;">
+          <div style="font-size: 15px; font-weight: 500;">Dark</div>
+          <div style="font-size: 12px; color: #7C6A5D;">Easier on the eyes at night</div>
+        </div>
+        <div style="width: 24px; height: 24px; border-radius: 12px; border: 1.5px solid #E8DDD0; flex-shrink: 0;"></div>
+      </div>
+
+    </div>
+
+    <div style="font-size: 12px; color: #A6968A; padding: 4px 2px 0 2px;">The choice is saved on this phone and applies straight away.</div>
+
+  </div>
+
+</div>
+</x-dc>
+<script data-dc-script data-props='{"$preview":{"width":412,"height":620}}'>
+class Component extends DCLogic {}
+</script>
+</body>
+</html>

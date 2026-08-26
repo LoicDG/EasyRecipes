@@ -1,0 +1,36 @@
+{
+  "artboards": [
+    { "file": "Main.dc.html", "title": "Home", "x": 0, "y": 0, "w": 412, "h": 915 },
+    { "file": "Detail.dc.html", "title": "Recipe", "x": 532, "y": 0, "w": 412, "h": 1340 },
+    { "file": "AddRecipe.dc.html", "title": "Add / edit recipe", "x": 1064, "y": 0, "w": 412, "h": 1220 },
+    { "file": "Ingredients.dc.html", "title": "Ingredients", "x": 1596, "y": 0, "w": 412, "h": 915 },
+    { "file": "Settings.dc.html", "title": "Settings", "x": 2128, "y": 0, "w": 412, "h": 620 },
+    { "file": "Tokens.dc.html", "title": "Tokens", "x": 0, "y": 1500, "w": 760, "h": 810 },
+    { "file": "DirectionB.dc.html", "title": "Direction B", "x": 880, "y": 1500, "w": 412, "h": 620 },
+    { "file": "DirectionC.dc.html", "title": "Direction C", "x": 1412, "y": 1500, "w": 412, "h": 660 }
+  ],
+  "annotations": [
+    {
+      "id": "direction-note",
+      "x": 0,
+      "y": -170,
+      "w": 500,
+      "text": "Direction A - warm editorial.\nNewsreader for titles, Karla for UI, paprika accent with an olive second colour for the \"you have this\" state.\nB and C below are the alternates if you'd rather go denser or more photo-led."
+    },
+    {
+      "id": "canmake-note",
+      "x": 1596,
+      "y": 970,
+      "w": 412,
+      "text": "Checking things here is what powers the \"Only what I can make\" toggle on Home. Ingredients are matched on lowercased name, so \"Garlic\" and \"garlic\" are the same row."
+    },
+    {
+      "id": "settings-note",
+      "x": 2128,
+      "y": 680,
+      "w": 412,
+      "text": "Reached from the sliders button in the Home header. The appearance choice is stored on the phone, so it survives a restart and does not follow the system unless you ask it to."
+    }
+  ],
+  "launch": { "view": "canvas" }
+}

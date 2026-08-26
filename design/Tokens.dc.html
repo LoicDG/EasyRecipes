@@ -1,0 +1,166 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Karla:wght@400;500;600;700&display=swap">
+  <style>
+    body { margin: 0; }
+    a { color: #C0532B; }
+    a:hover { color: #97401F; }
+  </style>
+</helmet>
+
+<div style="width: 760px; height: 810px; background: #FBF6EF; color: #2B2019; font-family: Karla, 'Helvetica Neue', Arial, sans-serif; padding: 32px; box-sizing: border-box; display: flex; flex-direction: column; gap: 24px; overflow: hidden;">
+
+  <div style="display: flex; flex-direction: column; gap: 4px;">
+    <div style="font-family: Newsreader, Georgia, serif; font-size: 28px; font-weight: 600; letter-spacing: -0.4px; line-height: 1;">Tokens</div>
+    <div style="font-size: 13px; color: #7C6A5D;">Newsreader for titles, Karla for everything else. Radii 12&ndash;18, hairline 1px.</div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px;">
+
+    <div style="background: #FFFFFF; border: 1px solid #E8DDD0; border-radius: 16px; padding: 18px; display: flex; flex-direction: column; gap: 13px;">
+      <div style="font-size: 11.5px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: #7C6A5D;">Light</div>
+      <div style="display: flex; flex-direction: column; gap: 8px;">
+        <div style="display: flex; align-items: center; gap: 11px;">
+          <div style="width: 34px; height: 34px; border-radius: 9px; background: #FBF6EF; border: 1px solid #E8DDD0; flex-shrink: 0;"></div>
+          <div style="flex-grow: 1; font-size: 13px; font-weight: 600;">background</div>
+          <div style="font-size: 12px; color: #7C6A5D; font-family: ui-monospace, Menlo, monospace;">#FBF6EF</div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 11px;">
+          <div style="width: 34px; height: 34px; border-radius: 9px; background: #FFFFFF; border: 1px solid #E8DDD0; flex-shrink: 0;"></div>
+          <div style="flex-grow: 1; font-size: 13px; font-weight: 600;">surface</div>
+          <div style="font-size: 12px; color: #7C6A5D; font-family: ui-monospace, Menlo, monospace;">#FFFFFF</div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 11px;">
+          <div style="width: 34px; height: 34px; border-radius: 9px; background: #F2EAE0; flex-shrink: 0;"></div>
+          <div style="flex-grow: 1; font-size: 13px; font-weight: 600;">surfaceSunken</div>
+          <div style="font-size: 12px; color: #7C6A5D; font-family: ui-monospace, Menlo, monospace;">#F2EAE0</div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 11px;">
+          <div style="width: 34px; height: 34px; border-radius: 9px; background: #2B2019; flex-shrink: 0;"></div>
+          <div style="flex-grow: 1; font-size: 13px; font-weight: 600;">ink</div>
+          <div style="font-size: 12px; color: #7C6A5D; font-family: ui-monospace, Menlo, monospace;">#2B2019</div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 11px;">
+          <div style="width: 34px; height: 34px; border-radius: 9px; background: #7C6A5D; flex-shrink: 0;"></div>
+          <div style="flex-grow: 1; font-size: 13px; font-weight: 600;">inkMuted</div>
+          <div style="font-size: 12px; color: #7C6A5D; font-family: ui-monospace, Menlo, monospace;">#7C6A5D</div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 11px;">
+          <div style="width: 34px; height: 34px; border-radius: 9px; background: #A6968A; flex-shrink: 0;"></div>
+          <div style="flex-grow: 1; font-size: 13px; font-weight: 600;">inkFaint</div>
+          <div style="font-size: 12px; color: #7C6A5D; font-family: ui-monospace, Menlo, monospace;">#A6968A</div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 11px;">
+          <div style="width: 34px; height: 34px; border-radius: 9px; background: #E8DDD0; flex-shrink: 0;"></div>
+          <div style="flex-grow: 1; font-size: 13px; font-weight: 600;">line</div>
+          <div style="font-size: 12px; color: #7C6A5D; font-family: ui-monospace, Menlo, monospace;">#E8DDD0</div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 11px;">
+          <div style="width: 34px; height: 34px; border-radius: 9px; background: #C0532B; flex-shrink: 0;"></div>
+          <div style="flex-grow: 1; font-size: 13px; font-weight: 600;">accent</div>
+          <div style="font-size: 12px; color: #7C6A5D; font-family: ui-monospace, Menlo, monospace;">#C0532B</div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 11px;">
+          <div style="width: 34px; height: 34px; border-radius: 9px; background: #F7E5DA; flex-shrink: 0;"></div>
+          <div style="flex-grow: 1; font-size: 13px; font-weight: 600;">accentSoft</div>
+          <div style="font-size: 12px; color: #7C6A5D; font-family: ui-monospace, Menlo, monospace;">#F7E5DA</div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 11px;">
+          <div style="width: 34px; height: 34px; border-radius: 9px; background: #5E7247; flex-shrink: 0;"></div>
+          <div style="flex-grow: 1; font-size: 13px; font-weight: 600;">olive</div>
+          <div style="font-size: 12px; color: #7C6A5D; font-family: ui-monospace, Menlo, monospace;">#5E7247</div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 11px;">
+          <div style="width: 34px; height: 34px; border-radius: 9px; background: #E7EBDC; flex-shrink: 0;"></div>
+          <div style="flex-grow: 1; font-size: 13px; font-weight: 600;">oliveSoft</div>
+          <div style="font-size: 12px; color: #7C6A5D; font-family: ui-monospace, Menlo, monospace;">#E7EBDC</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="background: #1F1913; border: 1px solid #362C22; border-radius: 16px; padding: 18px; display: flex; flex-direction: column; gap: 13px;">
+      <div style="font-size: 11.5px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: #A2907F;">Dark</div>
+      <div style="display: flex; flex-direction: column; gap: 8px;">
+        <div style="display: flex; align-items: center; gap: 11px;">
+          <div style="width: 34px; height: 34px; border-radius: 9px; background: #16120E; border: 1px solid #362C22; flex-shrink: 0;"></div>
+          <div style="flex-grow: 1; font-size: 13px; font-weight: 600; color: #F6EEE4;">background</div>
+          <div style="font-size: 12px; color: #A2907F; font-family: ui-monospace, Menlo, monospace;">#16120E</div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 11px;">
+          <div style="width: 34px; height: 34px; border-radius: 9px; background: #1F1913; border: 1px solid #362C22; flex-shrink: 0;"></div>
+          <div style="flex-grow: 1; font-size: 13px; font-weight: 600; color: #F6EEE4;">surface</div>
+          <div style="font-size: 12px; color: #A2907F; font-family: ui-monospace, Menlo, monospace;">#1F1913</div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 11px;">
+          <div style="width: 34px; height: 34px; border-radius: 9px; background: #2A221A; flex-shrink: 0;"></div>
+          <div style="flex-grow: 1; font-size: 13px; font-weight: 600; color: #F6EEE4;">surfaceSunken</div>
+          <div style="font-size: 12px; color: #A2907F; font-family: ui-monospace, Menlo, monospace;">#2A221A</div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 11px;">
+          <div style="width: 34px; height: 34px; border-radius: 9px; background: #F6EEE4; flex-shrink: 0;"></div>
+          <div style="flex-grow: 1; font-size: 13px; font-weight: 600; color: #F6EEE4;">ink</div>
+          <div style="font-size: 12px; color: #A2907F; font-family: ui-monospace, Menlo, monospace;">#F6EEE4</div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 11px;">
+          <div style="width: 34px; height: 34px; border-radius: 9px; background: #A2907F; flex-shrink: 0;"></div>
+          <div style="flex-grow: 1; font-size: 13px; font-weight: 600; color: #F6EEE4;">inkMuted</div>
+          <div style="font-size: 12px; color: #A2907F; font-family: ui-monospace, Menlo, monospace;">#A2907F</div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 11px;">
+          <div style="width: 34px; height: 34px; border-radius: 9px; background: #7A6A5C; flex-shrink: 0;"></div>
+          <div style="flex-grow: 1; font-size: 13px; font-weight: 600; color: #F6EEE4;">inkFaint</div>
+          <div style="font-size: 12px; color: #A2907F; font-family: ui-monospace, Menlo, monospace;">#7A6A5C</div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 11px;">
+          <div style="width: 34px; height: 34px; border-radius: 9px; background: #362C22; flex-shrink: 0;"></div>
+          <div style="flex-grow: 1; font-size: 13px; font-weight: 600; color: #F6EEE4;">line</div>
+          <div style="font-size: 12px; color: #A2907F; font-family: ui-monospace, Menlo, monospace;">#362C22</div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 11px;">
+          <div style="width: 34px; height: 34px; border-radius: 9px; background: #E4794B; flex-shrink: 0;"></div>
+          <div style="flex-grow: 1; font-size: 13px; font-weight: 600; color: #F6EEE4;">accent</div>
+          <div style="font-size: 12px; color: #A2907F; font-family: ui-monospace, Menlo, monospace;">#E4794B</div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 11px;">
+          <div style="width: 34px; height: 34px; border-radius: 9px; background: #3A241A; flex-shrink: 0;"></div>
+          <div style="flex-grow: 1; font-size: 13px; font-weight: 600; color: #F6EEE4;">accentSoft</div>
+          <div style="font-size: 12px; color: #A2907F; font-family: ui-monospace, Menlo, monospace;">#3A241A</div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 11px;">
+          <div style="width: 34px; height: 34px; border-radius: 9px; background: #9DB36C; flex-shrink: 0;"></div>
+          <div style="flex-grow: 1; font-size: 13px; font-weight: 600; color: #F6EEE4;">olive</div>
+          <div style="font-size: 12px; color: #A2907F; font-family: ui-monospace, Menlo, monospace;">#9DB36C</div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 11px;">
+          <div style="width: 34px; height: 34px; border-radius: 9px; background: #26301C; flex-shrink: 0;"></div>
+          <div style="flex-grow: 1; font-size: 13px; font-weight: 600; color: #F6EEE4;">oliveSoft</div>
+          <div style="font-size: 12px; color: #A2907F; font-family: ui-monospace, Menlo, monospace;">#26301C</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="display: flex; align-items: baseline; gap: 26px; flex-wrap: wrap; border-top: 1px solid #E8DDD0; padding-top: 18px;">
+    <div style="font-family: Newsreader, Georgia, serif; font-size: 30px; font-weight: 500; letter-spacing: -0.4px;">Display 30</div>
+    <div style="font-family: Newsreader, Georgia, serif; font-size: 21px; font-weight: 600;">Section 21</div>
+    <div style="font-family: Newsreader, Georgia, serif; font-size: 17px; font-weight: 600;">Card title 17</div>
+    <div style="font-size: 15px;">Body 15</div>
+    <div style="font-size: 12.5px; color: #7C6A5D;">Meta 12.5</div>
+    <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.3px; text-transform: uppercase; color: #C0532B;">Chip 11</div>
+  </div>
+
+</div>
+</x-dc>
+<script data-dc-script data-props='{"$preview":{"width":760,"height":810}}'>
+class Component extends DCLogic {}
+</script>
+</body>
+</html>
