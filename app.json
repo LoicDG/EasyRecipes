@@ -7,9 +7,6 @@
     "icon": "./assets/images/icon.png",
     "scheme": "easyrecipes",
     "userInterfaceStyle": "automatic",
-    "ios": {
-      "icon": "./assets/expo.icon"
-    },
     "android": {
       "package": "com.loic.easyrecipes",
       "adaptiveIcon": {

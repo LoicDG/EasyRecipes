@@ -1,0 +1,154 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Karla:wght@400;500;600;700&display=swap">
+  <style>
+    body { margin: 0; }
+    .mark { display: block; }
+  </style>
+</helmet>
+
+<div style="width: 760px; height: 660px; background: #FBF6EF; color: #2B2019; font-family: Karla, 'Helvetica Neue', Arial, sans-serif; padding: 32px; box-sizing: border-box; display: flex; flex-direction: column; gap: 24px; overflow: hidden;">
+
+  <div style="display: flex; flex-direction: column; gap: 4px;">
+    <div style="font-family: Newsreader, Georgia, serif; font-size: 28px; font-weight: 600; letter-spacing: -0.4px; line-height: 1;">Logo</div>
+    <div style="font-size: 13px; color: #7C6A5D;">A spoon standing in a bowl, drawn as a checkmark &mdash; the can-make state as an object.</div>
+  </div>
+
+  <div style="display: flex; gap: 22px; align-items: stretch;">
+
+    <div style="background: #F7E5DA; border-radius: 22px; width: 232px; height: 232px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+      <svg class="mark" width="232" height="232" viewBox="0 0 100 100">
+        <mask id="cutA" maskUnits="userSpaceOnUse" x="0" y="0" width="100" height="100">
+          <rect width="100" height="100" fill="black"/>
+          <path d="M15 47 H85 C85 71 71 84 50 84 C29 84 15 71 15 47 Z" fill="white"/>
+          <path d="M31 55 L45 70 L77 26" fill="none" stroke="white" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M31 55 L45 70 L77 26" fill="none" stroke="black" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+        </mask>
+        <g transform="translate(50 50) scale(0.92) translate(-50 -51.5)">
+          <rect width="100" height="100" fill="#C0532B" mask="url(#cutA)"/>
+        </g>
+      </svg>
+    </div>
+
+    <div style="background: #FFFFFF; border: 1px solid #E8DDD0; border-radius: 16px; padding: 18px; flex-grow: 1; display: flex; flex-direction: column; gap: 13px;">
+      <div style="font-size: 11.5px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: #7C6A5D;">Construction</div>
+      <div style="font-size: 13px; line-height: 1.55; color: #2B2019;">
+        One silhouette, two readings. The bowl is a filled half-disc; the check is stroked wide in paprika so its overshoot past the rim reads as a spoon handle, then stroked narrow as a cut-out so the interior is transparent.
+      </div>
+      <div style="font-size: 13px; line-height: 1.55; color: #7C6A5D;">
+        The overshoot is the whole idea &mdash; clipped to the rim it collapses back into a tick in a container. Olive stays out of the mark: in the app it means &ldquo;you have this ingredient&rdquo;, and inside the icon it just reads as a badge.
+      </div>
+      <div style="display: flex; gap: 8px; margin-top: auto;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <div style="width: 28px; height: 28px; border-radius: 8px; background: #C0532B;"></div>
+          <div style="font-size: 12px; color: #7C6A5D; font-family: ui-monospace, Menlo, monospace;">#C0532B</div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px; margin-left: 14px;">
+          <div style="width: 28px; height: 28px; border-radius: 8px; background: #F7E5DA;"></div>
+          <div style="font-size: 12px; color: #7C6A5D; font-family: ui-monospace, Menlo, monospace;">#F7E5DA</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="background: #FFFFFF; border: 1px solid #E8DDD0; border-radius: 16px; padding: 18px; display: flex; flex-direction: column; gap: 15px;">
+    <div style="font-size: 11.5px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: #7C6A5D;">Launcher masks and sizes</div>
+    <div style="display: flex; align-items: center; gap: 26px;">
+
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+        <div style="width: 96px; height: 96px; border-radius: 50%; background: #F7E5DA; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+          <svg class="mark" width="96" height="96" viewBox="0 0 100 100">
+            <mask id="cutB" maskUnits="userSpaceOnUse" x="0" y="0" width="100" height="100">
+              <rect width="100" height="100" fill="black"/>
+              <path d="M15 47 H85 C85 71 71 84 50 84 C29 84 15 71 15 47 Z" fill="white"/>
+              <path d="M31 55 L45 70 L77 26" fill="none" stroke="white" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M31 55 L45 70 L77 26" fill="none" stroke="black" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+            </mask>
+            <g transform="translate(50 50) scale(0.65) translate(-50 -51.5)">
+              <rect width="100" height="100" fill="#C0532B" mask="url(#cutB)"/>
+            </g>
+          </svg>
+        </div>
+        <div style="font-size: 12px; color: #7C6A5D;">Circle</div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+        <div style="width: 96px; height: 96px; border-radius: 27px; background: #F7E5DA; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+          <svg class="mark" width="96" height="96" viewBox="0 0 100 100">
+            <mask id="cutC" maskUnits="userSpaceOnUse" x="0" y="0" width="100" height="100">
+              <rect width="100" height="100" fill="black"/>
+              <path d="M15 47 H85 C85 71 71 84 50 84 C29 84 15 71 15 47 Z" fill="white"/>
+              <path d="M31 55 L45 70 L77 26" fill="none" stroke="white" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M31 55 L45 70 L77 26" fill="none" stroke="black" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+            </mask>
+            <g transform="translate(50 50) scale(0.65) translate(-50 -51.5)">
+              <rect width="100" height="100" fill="#C0532B" mask="url(#cutC)"/>
+            </g>
+          </svg>
+        </div>
+        <div style="font-size: 12px; color: #7C6A5D;">Squircle</div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+        <div style="width: 96px; height: 96px; border-radius: 27px; background: #2A221A; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+          <svg class="mark" width="96" height="96" viewBox="0 0 100 100">
+            <mask id="cutD" maskUnits="userSpaceOnUse" x="0" y="0" width="100" height="100">
+              <rect width="100" height="100" fill="black"/>
+              <path d="M15 47 H85 C85 71 71 84 50 84 C29 84 15 71 15 47 Z" fill="white"/>
+              <path d="M31 55 L45 70 L77 26" fill="none" stroke="white" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M31 55 L45 70 L77 26" fill="none" stroke="black" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+            </mask>
+            <g transform="translate(50 50) scale(0.65) translate(-50 -51.5)">
+              <rect width="100" height="100" fill="#E4794B" mask="url(#cutD)"/>
+            </g>
+          </svg>
+        </div>
+        <div style="font-size: 12px; color: #7C6A5D;">Dark</div>
+      </div>
+
+      <div style="display: flex; align-items: flex-end; gap: 16px; margin-left: 8px;">
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+          <svg class="mark" width="48" height="48" viewBox="0 0 100 100">
+            <mask id="cutE" maskUnits="userSpaceOnUse" x="0" y="0" width="100" height="100">
+              <rect width="100" height="100" fill="black"/>
+              <path d="M15 47 H85 C85 71 71 84 50 84 C29 84 15 71 15 47 Z" fill="white"/>
+              <path d="M31 55 L45 70 L77 26" fill="none" stroke="white" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M31 55 L45 70 L77 26" fill="none" stroke="black" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+            </mask>
+            <g transform="translate(50 50) scale(0.92) translate(-50 -51.5)">
+              <rect width="100" height="100" fill="#C0532B" mask="url(#cutE)"/>
+            </g>
+          </svg>
+          <div style="font-size: 12px; color: #7C6A5D;">48</div>
+        </div>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+          <svg class="mark" width="28" height="28" viewBox="0 0 100 100">
+            <mask id="cutF" maskUnits="userSpaceOnUse" x="0" y="0" width="100" height="100">
+              <rect width="100" height="100" fill="black"/>
+              <path d="M15 47 H85 C85 71 71 84 50 84 C29 84 15 71 15 47 Z" fill="white"/>
+              <path d="M31 55 L45 70 L77 26" fill="none" stroke="white" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M31 55 L45 70 L77 26" fill="none" stroke="black" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+            </mask>
+            <g transform="translate(50 50) scale(0.92) translate(-50 -51.5)">
+              <rect width="100" height="100" fill="#C0532B" mask="url(#cutF)"/>
+            </g>
+          </svg>
+          <div style="font-size: 12px; color: #7C6A5D;">28</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+</x-dc>
+</body>
+</html>

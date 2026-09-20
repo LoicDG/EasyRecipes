@@ -1,0 +1,21 @@
+<!--
+  EasyRecipes mark. A spoon standing in a bowl, whose form is a checkmark:
+  the bowl is the tick's vertex, the handle is its long arm leaving the rim.
+  The overshoot past the rim is what makes it a spoon rather than a tick in a
+  container, so don't trim it.
+
+  Geometry is duplicated in scripts/build-icons.sh (raster assets) and
+  src/components/logo.tsx (in-app). Change all three together.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 100 100">
+  <rect width="100" height="100" fill="#F7E5DA"/>
+  <mask id="cut" maskUnits="userSpaceOnUse" x="0" y="0" width="100" height="100">
+    <rect width="100" height="100" fill="black"/>
+    <path d="M15 47 H85 C85 71 71 84 50 84 C29 84 15 71 15 47 Z" fill="white"/>
+    <path d="M31 55 L45 70 L77 26" fill="none" stroke="white" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M31 55 L45 70 L77 26" fill="none" stroke="black" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  </mask>
+  <g transform="translate(50 50) scale(0.92) translate(-50 -51.5)">
+    <rect width="100" height="100" fill="#C0532B" mask="url(#cut)"/>
+  </g>
+</svg>
