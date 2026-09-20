@@ -44,7 +44,7 @@ export async function pickRecipeImage(): Promise<string | null> {
     `${Date.now()}-${Math.random().toString(36).slice(2, 8)}${extensionFor(asset.uri)}`
   );
 
-  new File(asset.uri).copy(destination);
+  await new File(asset.uri).copy(destination);
   return destination.uri;
 }
 
