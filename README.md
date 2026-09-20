@@ -14,8 +14,8 @@ npx expo start
 Install **Expo Go** from the Play Store, then scan the QR code the dev server
 prints. The app reloads as you edit.
 
-The project is pinned to **Expo SDK 54** because Expo Go supports exactly one
-SDK, and 54 is what the Play Store build on the target phone runs. Don't upgrade
+The project is pinned to **Expo SDK 57** because Expo Go supports exactly one
+SDK, and 57 is what the Play Store build on the target phone runs. Don't upgrade
 the SDK without checking Expo Go first — a newer project fails with "Project is
 incompatible with this version of Expo Go" even though the bundle downloads
 fine. Check with:
@@ -25,7 +25,7 @@ curl -s https://exp.host/--/api/v2/versions \
   | node -e "let d='';process.stdin.on('data',c=>d+=c).on('end',()=>{const v=JSON.parse(d).sdkVersions;for(const k of Object.keys(v).slice(-4))console.log(k,'-> Expo Go',v[k].androidClientVersion)})"
 ```
 
-Expo Go's own version number matches the SDK it supports (54.x runs SDK 54).
+Expo Go's own version number matches the SDK it supports (57.x runs SDK 57).
 
 ## What it does
 

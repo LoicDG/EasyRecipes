@@ -1,168 +1,197 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+EasyRecipes is an offline Android recipe app: Expo + React Native (expo-router),
+everything in local SQLite. No account, no server, no network calls at runtime.
+One developer, tested by hand on a physical phone through Expo Go. There is no
+test runner and no CI.
 
-@AGENTS.md
+## Read first: the SDK 57 pin
 
-## What this is
+The project is pinned to **Expo SDK 57** because Expo Go supports exactly one SDK
+at a time and 57 is what the owner's phone runs. On any other SDK the app fails on
+device with "Project is incompatible with this version of Expo Go" *after* the
+bundle downloads and compiles cleanly — it looks like a code bug and is not one.
 
-An offline Android recipe app: Expo + React Native, expo-router, everything
-stored locally in SQLite. No account, no server, no network calls at runtime.
+- **Don't bump the SDK**, and don't `npm install <pkg>` (it resolves `latest`,
+  which may target a newer SDK). Use `npx expo install <pkg>`.
+- Before any dependency change, see which SDKs Expo Go supports:
 
-## The SDK 54 pin — read before touching dependencies
+  ```bash
+  curl -s https://exp.host/--/api/v2/versions \
+    | node -e "let d='';process.stdin.on('data',c=>d+=c).on('end',()=>{const v=JSON.parse(d).sdkVersions;for(const k of Object.keys(v).slice(-4))console.log(k,'-> Expo Go',v[k].androidClientVersion)})"
+  ```
 
-The project is pinned to **Expo SDK 54** because it is developed and tested
-through **Expo Go on the owner's phone**, Expo Go supports exactly one SDK
-version, and 54 is what its Play Store build runs. A project on a newer SDK
-fails on device with "Project is incompatible with this version of Expo Go"
-*after* the bundle downloads and compiles cleanly — so the failure looks like a
-code bug and is not one.
-
-Never bump the SDK, and never install a package with `npm install` (which
-resolves `latest`), without checking Expo Go first:
-
-```bash
-curl -s https://exp.host/--/api/v2/versions \
-  | node -e "let d='';process.stdin.on('data',c=>d+=c).on('end',()=>{const v=JSON.parse(d).sdkVersions;for(const k of Object.keys(v).slice(-4))console.log(k,'-> Expo Go',v[k].androidClientVersion)})"
-```
-
-Use `npx expo install <pkg>` so versions are resolved against the SDK. Expo Go's
-own version number matches the SDK it runs (54.x → SDK 54).
-
-Config-plugin entries in `app.json` must exist as plugins *in this SDK* —
-`expo config` fails outright otherwise, and `expo install --fix` has been known
-to add entries valid only for a newer SDK.
-
-Note that `app.json`'s `android` block does **not** apply under Expo Go, which
-ships its own manifest. Anything needing a native config change cannot be tested
-this way.
+  That lists Expo Go *releases*; it cannot say what the phone has installed. SDK 58
+  was still preview when the project moved to 57 — ask the owner before moving.
+- Only libraries bundled in Expo Go run. `app.json`'s `android` block is ignored
+  under Expo Go (it ships its own manifest), so native config can't be tested here.
+- `expo-constants` and `expo-linking` must stay direct dependencies — they are
+  peers of `expo-router` (expo-doctor catches it).
+- `npx expo install --fix` can't repair a tree whose `package-lock.json` still pins
+  the previous SDK; npm fails on peer conflicts first. Delete `node_modules` *and*
+  `package-lock.json`, reinstall, then fix. `--fix` has also added config-plugin
+  entries that only exist in newer SDKs; `expo config` fails outright on those.
+- Read the **SDK 57 docs** (https://docs.expo.dev/versions/v57.0.0/), not the
+  latest. Two differences that bite here: the JS tab navigator is
+  `expo-router/js-tabs` (`Tabs` from `expo-router` is deprecated), and
+  `File.copy()` returns a promise (the sync form is `copySync()`).
 
 ## Commands
 
 ```bash
-npx expo start                      # dev server; scan the QR with Expo Go
-npx tsc --noEmit                    # typecheck
-npx expo lint                       # eslint (silent + exit 0 means clean)
-npx expo config --type public       # validates app.json plugin resolution
-npx expo export --platform android  # full bundle build — the strongest check
+npx tsc --noEmit                    # typecheck (strict)
+npx expo lint                       # eslint — silent + exit 0 means clean
+npx expo config --type public       # validates app.json and plugin resolution
+npx expo export --platform android  # full Metro/Hermes bundle — strongest off-device check
+npx expo start                      # dev server; scan the QR in Expo Go
 ```
 
-There is no test runner. `tsc`, `lint` and `export` are the automated checks;
-everything else needs the physical phone.
+All four checks are clean on the current tree, so any output is from your change.
+Run `tsc` and `lint` after every change; add `export` when touching dependencies,
+`app.json` or imports. `typedRoutes` types (`.expo/types/router.d.ts`, gitignored)
+are generated by the dev server, not by `export` — after adding or renaming a
+route, start the dev server once or `tsc` will reject its `href`s.
+
+Layout, gestures, keyboard behaviour and photo picking need the phone. For UI
+changes, say they weren't exercised on device rather than implying they work.
 
 ### Verifying without a device
 
-Two things can be checked properly off-device, and both are worth doing rather
-than assuming:
+- **SQL and migrations.** `src/lib/db.ts` keeps its schema in template literals
+  that can be pulled out and replayed against Node's built-in `node:sqlite`
+  (Node ≥ 22.13, no flag needed) in a throwaway script: seed a database at the old `user_version`,
+  run the upgrade blocks, assert the data survived. Do this for anything touching
+  the schema, the migration ladder, or `CAN_MAKE_PREDICATE`.
+- **The bundle compiling under the dev server.** With `expo start` running, fetch
+  `http://127.0.0.1:8081/` with header `expo-platform: android`. The manifest gives
+  `runtimeVersion` (should be `exposdk:57.0.0`) and the `launchAsset.url` to request.
 
-- **SQL and migrations.** `src/lib/db.ts` holds its schema in template literals
-  that can be pulled out of the source and replayed against Node's built-in
-  `node:sqlite` in a throwaway script — seed a database at the old
-  `user_version`, run the upgrade blocks, and assert the data survived. Use this
-  for anything touching the schema, the migration ladder, or the can-make query.
-- **The bundle actually compiling.** Fetch the dev bundle over HTTP; the
-  manifest at `http://127.0.0.1:8081/` (with header `expo-platform: android`)
-  gives both `runtimeVersion` (should read `exposdk:54.0.0`) and the exact
-  `launchAsset.url` to request.
+## Where things live
 
-## Architecture
+```
+src/app/_layout.tsx             root: fonts, SQLiteProvider, ThemeProvider, Stack
+src/app/(tabs)/_layout.tsx      custom bottom tab bar (Recipes, Ingredients)
+src/app/(tabs)/index.tsx        home: recipe grid, tag filters, can-make toggle, stats
+src/app/(tabs)/ingredients.tsx  pantry checklist
+src/app/recipe/[id].tsx         recipe detail
+src/app/recipe/edit.tsx         create/edit form (modal; `?id=` means edit) — the big one
+src/app/settings.tsx            appearance picker (modal)
+src/lib/db.ts                   schema, migrations, every query
+src/lib/images.ts               pick, copy and sweep photos
+src/lib/color.ts                mix(), tagPalette()
+src/hooks/                      use-db-query, use-theme, use-keyboard-aware-scroll
+src/components/                 recipe-card, tag-chip, empty-state, icons
+src/constants/theme.ts          Colors (light/dark), Fonts, Spacing, Radius, TagColors
+design/                         design canvas source (see the last section)
+```
 
-### SQLite is the state layer
+## Data layer
 
-There is no client state library and no in-memory cache. `src/lib/db.ts` is the
-only module that writes SQL; it exports plain `async (db, ...) => data`
-functions returning camelCase types, and screens call them through
-`useDbQuery`. Keep it that way — SQL does not belong in a screen.
+SQLite is the only state: no client state library, no in-memory cache.
+`src/lib/db.ts` is the **only** module that writes SQL. It exports plain
+`async (db, ...) => data` functions returning camelCase types; screens call them
+through `useDbQuery`. SQL does not belong in a screen.
 
-`src/hooks/use-db-query.ts` re-runs its query whenever the screen regains focus,
-so an edit made on one screen shows up on the way back without any invalidation
-plumbing. Its second argument is a **string `key`** standing in for a dependency
-list (change it when the query's inputs change), and it returns a `reload()` for
-refreshing in place after a write on the same screen. The string-key design
-exists because `react-hooks/exhaustive-deps` demands a literal array; don't
-"simplify" it back into a deps array.
+Tables (`user_version` = `SCHEMA_VERSION`, currently 2):
 
-### Migrations
+- `recipes` — title, description, `time_minutes`, `image_uri`, instructions, `created_at`
+- `tags` — name, `name_key` (UNIQUE), color
+- `recipe_tags`, `recipe_ingredients` — cascade-delete with their recipe
+- `pantry` — `name_key` → `checked`. Keyed by ingredient *name*, not by row, so
+  ticking "garlic" applies to every recipe that uses it
+- `settings` — key/value; the only key so far is `themePreference`
 
-`SCHEMA_VERSION` plus `PRAGMA user_version` drive a ladder of `if (current < N)`
-blocks in `migrateDb`. To change the schema, bump the constant and **add** a
-block — never edit an earlier one, since phones in the wild are at older
-versions. `migrateDb` runs in `SQLiteProvider`'s `onInit`, which resolves before
-any child renders, so the schema is guaranteed present everywhere below it.
+**`useDbQuery(run, key)`** (`src/hooks/use-db-query.ts`) re-runs on screen focus, so
+an edit made elsewhere shows up on the way back with no invalidation. `key` is a
+**string** standing in for a dependency list — change it when the query's inputs
+change. It returns `{ data, reload }`; `data` is `null` until the first result.
+Focus only covers navigating between screens: after a write on the *same* screen,
+call `reload()` on every query it affects (see the tag delete in `index.tsx`). The
+string key exists because `react-hooks/exhaustive-deps` demands a literal array —
+don't "simplify" it back into one.
 
-### The normalised name key
+**Migrations.** A ladder of `if (current < N)` blocks in `migrateDb`. To change the
+schema, bump `SCHEMA_VERSION` and **add** a block; never edit an earlier one, since
+phones in the wild are at older versions. `migrateDb` runs in `SQLiteProvider`'s
+`onInit`, which resolves before any child renders, so the schema is present
+everywhere below it.
 
-`normalizeName()` (trim, lowercase, collapse whitespace) is what makes "Garlic",
-"garlic " and "GARLIC" one thing. It is the join between `recipe_ingredients`
-and `pantry`, and it enforces tag uniqueness via `tags.name_key`. Any new
-name-matching feature should go through it rather than comparing raw text.
+**The normalised name key.** `normalizeName()` (trim, lowercase, collapse
+whitespace) makes "Garlic", "garlic " and "GARLIC" one thing. It joins
+`recipe_ingredients` to `pantry` and enforces tag uniqueness via `tags.name_key`.
+Any name-matching feature goes through it, never raw text comparison.
 
-`CAN_MAKE_PREDICATE` is a shared SQL fragment used by both `listRecipes` and
-`getStats` so the grid and the header count can never disagree. A recipe with no
-ingredients recorded is deliberately never "makeable".
+- `CAN_MAKE_PREDICATE` is shared by `listRecipes` and `getStats` so the grid and the
+  header count can't disagree. A recipe with no ingredients is deliberately never
+  "makeable".
+- Tag filtering is **AND**: a recipe must carry every selected tag.
+- Saving a recipe deletes and re-inserts its ingredient and tag rows
+  (`writeChildren`), so `recipe_ingredients.id` is **not stable across edits**.
+  Anything that must persist belongs on `name_key`, as `pantry` does.
 
-Tag filtering is **AND** semantics: a recipe must carry every selected tag.
+## App shell
 
-### Provider nesting is load-bearing
-
-`src/app/_layout.tsx` is split into `RootLayout` (providers) and
-`RootNavigator` (the Stack) for a reason: `ThemeProvider` reads the saved
-appearance out of SQLite, so it must sit *inside* `SQLiteProvider`, and anything
-that consumes the theme must therefore sit inside `ThemeProvider`. Adding a
-top-level `useTheme()` call to `RootLayout` would break this.
+- **Provider nesting is load-bearing.** `RootLayout` holds the providers and
+  `RootNavigator` holds the Stack. `ThemeProvider` reads the saved appearance out of
+  SQLite, so it must sit *inside* `SQLiteProvider`, and anything using the theme must
+  sit inside `ThemeProvider`. A top-level `useTheme()` in `RootLayout` would break it.
+- The root Stack sets `headerShown: false`; screens draw their own headers.
+  `recipe/edit` and `settings` are modals.
+- Fonts (Newsreader for titles, Karla for UI) load in the root layout and the splash
+  screen holds until they're ready. Use the `Fonts` constants, not family strings.
 
 ### Theming
 
-Every colour comes from `src/constants/theme.ts` via `useTheme()` — no colour
-literals in screens. The palettes were lifted from the design canvas, so the two
-should move together.
+Colours come from `src/constants/theme.ts` via `useTheme()`; don't add colour
+literals to screens. A few fixed ones exist on purpose (white checkmarks on coloured
+tags, the card shadow, the mixing targets in `color.ts`). The palettes mirror the
+Tokens artboard in `design/`, so change the two together.
 
-Appearance is user-selectable (system / light / dark), stored in the `settings`
-table and read **synchronously** at first render (`getSettingSync`) so the app
-never flashes the wrong palette. `useTheme`/`useIsDark` read from context, not
-`useColorScheme` directly, so a change repaints every screen at once.
+Appearance (system / light / dark) lives in `settings` and is read **synchronously**
+at first render (`getSettingSync`) so the app never flashes the wrong palette.
+`useTheme`/`useIsDark` read from context rather than `useColorScheme`, so a change
+repaints every screen at once. A tag's colour is one stored hex; `tagPalette()`
+adapts it per scheme at render time instead of storing two.
 
-Tag colours are a single stored hex per tag; `tagPalette()` in `src/lib/color.ts`
-adapts it per scheme at render time rather than storing two colours.
-
-Icons are hand-written `react-native-svg` in `src/components/icons.tsx` — there
-is no icon font or icon package. Add new ones there in the same stroke style.
+Icons are hand-written `react-native-svg` in `src/components/icons.tsx` — no icon
+font or package. Add new ones there in the same stroke style.
 
 ### Keyboard handling on Android
 
-Edge-to-edge (default from SDK 54) means the window no longer shrinks when the
-keyboard opens — it just draws over the bottom — so `KeyboardAvoidingView` has
-nothing to react to and lower fields end up hidden.
-`src/hooks/use-keyboard-aware-scroll.ts` handles this manually and every form
-should use it: pad the scroll content by the keyboard height, and give **every**
-`TextInput` the hook's `onInputFocus`, because moving between fields while the
-keyboard is already up fires no keyboard event. Multiline inputs need a
-`maxHeight` so they scroll internally instead of outgrowing the visible area.
+Edge-to-edge means the window no longer shrinks when the keyboard opens; it draws
+over the bottom, so `KeyboardAvoidingView` has nothing to react to.
+`use-keyboard-aware-scroll.ts` does it by hand, and every form should use it: pad
+the scroll content by the keyboard height, and give **every** `TextInput` the hook's
+`onInputFocus` — moving between fields with the keyboard already up fires no keyboard
+event. Multiline inputs need a `maxHeight` so they scroll internally.
 
 ### Images
 
-Picked photos live in the picker's cache, which Android may purge, so
+Picked photos sit in the picker's cache, which Android may purge, so
 `src/lib/images.ts` copies them into the document directory and stores that URI.
-Abandoning a half-finished form can strand a file, so orphans are swept at
-launch instead of being tracked through every exit path. `File.copy()` is
-**synchronous** in SDK 54.
+`File.copy()` is async and must be awaited before the destination URI is used.
+Abandoning a half-finished form can strand a file, so orphans are swept at launch
+(`sweepOrphanImages`) rather than tracked through every exit path.
 
 ## Conventions
 
-- `@/` maps to `src/`. Routes live under `src/app` (`transform.routerRoot`),
-  not the repo root.
+- `@/` maps to `src/`. Routes live in `src/app`, not a root `app/`.
 - Files are kebab-case; components are PascalCase within them.
-- Comments explain *why* — a constraint, a workaround, a non-obvious ordering.
-  Don't add comments that restate the code.
-- Two eslint rules have shaped code here and will again: `exhaustive-deps`
-  requires literal dependency arrays, and setting state inside an effect is
-  rejected (hence the local-override map in `ingredients.tsx` rather than
-  mirroring query results into state).
+- Comments explain *why* — a constraint, a workaround, a non-obvious ordering. Don't
+  restate the code.
+- React Compiler is on (`experiments.reactCompiler`) and `eslint-config-expo` enforces
+  its rules. Two have shaped the code: `exhaustive-deps` needs literal dependency
+  arrays, and `react-hooks/set-state-in-effect` rejects calling `setState`
+  synchronously in an effect body — hence the local-override map in `ingredients.tsx`
+  instead of mirroring query results into state. `setState` inside a `.then` callback
+  is fine (`edit.tsx` loads that way).
 
 ## Design canvas
 
-`design/` holds `.dc.html` artboards plus `canvas.json`; they are the design
-source of truth and are seeded into a published Claude Design canvas. When a
-screen's design changes, update the matching artboard, re-seed with the design
-skill's `seed-canvas.mjs`, and republish to the **same** artifact URL. Don't
-edit the seeded `easyrecipes-app-design.html` directly — it is regenerated.
+`design/` holds `.dc.html` artboards plus `canvas.json`; they are the design source
+of truth. Artboards Home, Recipe, Add/edit, Ingredients, Settings and Tokens are the
+shipped direction; Direction B and C are unbuilt alternates. When a screen's design
+changes, update its artboard, re-seed with the design skill's `seed-canvas.mjs`, and
+republish to the **same** published artifact ("EasyRecipes App Design" — find its URL
+with the Artifact tool's `list`). `design/easyrecipes-app-design.html` is the seeded
+output: generated and gitignored, so never edit it.
