@@ -36,24 +36,34 @@ export default function IngredientsScreen() {
   const { data: stats, reload: reloadStats } = useDbQuery(getStats);
 
   // Ticks are applied locally the moment they are tapped, so the row responds
-  // without waiting on the write; the override always matches what we saved.
-  const [overrides, setOverrides] = useState<Record<string, boolean>>({});
+  // without waiting on the write. They are pinned to the result they were made
+  // against: the grocery list ticks the pantry too, so a refetch is the truth
+  // and any overrides made before it are dropped.
+  const [local, setLocal] = useState<{
+    base: PantryItem[] | null;
+    overrides: Record<string, boolean>;
+  }>({ base: null, overrides: {} });
 
-  const items = useMemo<PantryItem[]>(
-    () =>
-      (pantry ?? []).map((item) => ({
-        ...item,
-        checked: overrides[item.nameKey] ?? item.checked,
-      })),
-    [pantry, overrides]
-  );
+  const items = useMemo<PantryItem[]>(() => {
+    const overrides = local.base === pantry ? local.overrides : {};
+    return (pantry ?? []).map((item) => ({
+      ...item,
+      checked: overrides[item.nameKey] ?? item.checked,
+    }));
+  }, [pantry, local]);
 
   const sections = useMemo(() => groupByInitial(items), [items]);
   const checkedCount = items.filter((item) => item.checked).length;
 
   async function toggle(item: PantryItem) {
     const next = !item.checked;
-    setOverrides((current) => ({ ...current, [item.nameKey]: next }));
+    setLocal((current) => ({
+      base: pantry,
+      overrides: {
+        ...(current.base === pantry ? current.overrides : {}),
+        [item.nameKey]: next,
+      },
+    }));
     await setPantryChecked(db, item.nameKey, next);
     reloadStats();
   }
@@ -66,7 +76,6 @@ export default function IngredientsScreen() {
         style: 'destructive',
         onPress: async () => {
           await clearPantry(db);
-          setOverrides({});
           reloadPantry();
           reloadStats();
         },

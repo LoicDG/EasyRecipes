@@ -70,9 +70,10 @@ changes, say they weren't exercised on device rather than implying they work.
 
 ```
 src/app/_layout.tsx             root: fonts, SQLiteProvider, ThemeProvider, Stack
-src/app/(tabs)/_layout.tsx      custom bottom tab bar (Recipes, Ingredients)
+src/app/(tabs)/_layout.tsx      custom bottom tab bar (Recipes, Ingredients, Groceries)
 src/app/(tabs)/index.tsx        home: recipe grid, tag filters, can-make toggle, stats
 src/app/(tabs)/ingredients.tsx  pantry checklist
+src/app/(tabs)/groceries.tsx    grocery list: missing ingredients + hand-added items
 src/app/recipe/[id].tsx         recipe detail
 src/app/recipe/edit.tsx         create/edit form (modal; `?id=` means edit) — the big one
 src/app/settings.tsx            appearance picker (modal)
@@ -93,7 +94,7 @@ SQLite is the only state: no client state library, no in-memory cache.
 `async (db, ...) => data` functions returning camelCase types; screens call them
 through `useDbQuery`. SQL does not belong in a screen.
 
-Tables (`user_version` = `SCHEMA_VERSION`, currently 2):
+Tables (`user_version` = `SCHEMA_VERSION`, currently 3):
 
 - `recipes` — title, description, `time_minutes`, `image_uri`, instructions, `created_at`
 - `tags` — name, `name_key` (UNIQUE), color
@@ -101,6 +102,12 @@ Tables (`user_version` = `SCHEMA_VERSION`, currently 2):
 - `pantry` — `name_key` → `checked`. Keyed by ingredient *name*, not by row, so
   ticking "garlic" applies to every recipe that uses it
 - `settings` — key/value; the only key so far is `themePreference`
+- `grocery` — `name_key` → name: only items typed in by hand. The grocery list is
+  *derived*: every ingredient not ticked in `pantry`, plus these rows. Ticking an
+  item deletes its row and ticks its `pantry` counterpart when a recipe uses that
+  name, so it leaves the list; unticking in Ingredients brings it back. Undo
+  (`restoreGroceryItem`) needs the item as it was listed, since that says which
+  of the two to put back
 
 **`useDbQuery(run, key)`** (`src/hooks/use-db-query.ts`) re-runs on screen focus, so
 an edit made elsewhere shows up on the way back with no invalidation. `key` is a
@@ -184,13 +191,15 @@ Abandoning a half-finished form can strand a file, so orphans are swept at launc
   its rules. Two have shaped the code: `exhaustive-deps` needs literal dependency
   arrays, and `react-hooks/set-state-in-effect` rejects calling `setState`
   synchronously in an effect body — hence the local-override map in `ingredients.tsx`
-  instead of mirroring query results into state. `setState` inside a `.then` callback
+  (and the ticked-keys list in `groceries.tsx`) instead of mirroring query results
+  into state. Both are pinned to the query result they were made against and ignored
+  once a refetch lands, because each screen writes the other's state. `setState` inside a `.then` callback
   is fine (`edit.tsx` loads that way).
 
 ## Design canvas
 
 `design/` holds `.dc.html` artboards plus `canvas.json`; they are the design source
-of truth. Artboards Home, Recipe, Add/edit, Ingredients, Settings and Tokens are the
+of truth. Artboards Home, Recipe, Add/edit, Ingredients, Groceries, Settings and Tokens are the
 shipped direction; Direction B and C are unbuilt alternates. When a screen's design
 changes, update its artboard, re-seed with the design skill's `seed-canvas.mjs`, and
 republish to the **same** published artifact ("EasyRecipes App Design" — find its URL

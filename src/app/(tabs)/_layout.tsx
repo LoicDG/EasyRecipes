@@ -2,13 +2,14 @@ import { type BottomTabBarProps, Tabs } from 'expo-router/js-tabs';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { ChecklistIcon, GridIcon } from '@/components/icons';
+import { BagIcon, ChecklistIcon, GridIcon } from '@/components/icons';
 import { Fonts, TabBarHeight } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 
 const TAB_META: Record<string, { label: string; Icon: typeof GridIcon }> = {
   index: { label: 'Recipes', Icon: GridIcon },
   ingredients: { label: 'Ingredients', Icon: ChecklistIcon },
+  groceries: { label: 'Groceries', Icon: BagIcon },
 };
 
 function TabBar({ state, navigation }: BottomTabBarProps) {
@@ -70,6 +71,7 @@ export default function TabsLayout() {
     <Tabs tabBar={(props) => <TabBar {...props} />} screenOptions={{ headerShown: false }}>
       <Tabs.Screen name="index" />
       <Tabs.Screen name="ingredients" />
+      <Tabs.Screen name="groceries" />
     </Tabs>
   );
 }

@@ -41,6 +41,14 @@
       "h": 620
     },
     {
+      "file": "Groceries.dc.html",
+      "title": "Groceries",
+      "x": 2660,
+      "y": 0,
+      "w": 412,
+      "h": 915
+    },
+    {
       "file": "Tokens.dc.html",
       "title": "Tokens",
       "x": 0,
@@ -101,6 +109,13 @@
       "y": 3150,
       "w": 760,
       "text": "Regenerate the launcher assets with scripts/build-icons.sh after changing the mark. The geometry lives in three places that must move together: design/logo.svg, the build script, and src/components/logo.tsx."
+    },
+    {
+      "id": "groceries-note",
+      "x": 2660,
+      "y": 970,
+      "w": 412,
+      "text": "Built from the Ingredients tab: anything a recipe needs that isn't ticked shows up here on its own, plus extras typed in by hand. Ticking a row ticks the same ingredient in the pantry and takes it off the list, with an Undo in case of a mis-tap. Unticking it in Ingredients puts it back. Chickpeas shows the moment between the tap and the row folding away."
     }
   ],
   "launch": {

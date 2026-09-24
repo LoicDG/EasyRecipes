@@ -44,6 +44,17 @@ export type PantryItem = {
   checked: boolean;
 };
 
+export type GroceryItem = {
+  nameKey: string;
+  name: string;
+  /** Recipes that call for it; 0 for something only added by hand. */
+  recipeCount: number;
+  /** Added by hand, as opposed to only being on the list because it is missing. */
+  manual: boolean;
+  /** A recipe needs it and the pantry doesn't have it, so it's on the list regardless. */
+  missing: boolean;
+};
+
 export type RecipeInput = {
   title: string;
   description: string;
@@ -59,7 +70,7 @@ export type RecipeFilter = {
   onlyCanMake: boolean;
 };
 
-const SCHEMA_VERSION = 2;
+const SCHEMA_VERSION = 3;
 
 export async function migrateDb(db: SQLiteDatabase): Promise<void> {
   await db.execAsync('PRAGMA journal_mode = WAL;');
@@ -119,6 +130,17 @@ export async function migrateDb(db: SQLiteDatabase): Promise<void> {
       CREATE TABLE settings (
         key TEXT PRIMARY KEY,
         value TEXT NOT NULL
+      );
+    `);
+  }
+
+  if (current < 3) {
+    // Only items typed in by hand. A missing ingredient needs no row: the list
+    // is derived from the pantry.
+    await db.execAsync(`
+      CREATE TABLE grocery (
+        name_key TEXT PRIMARY KEY,
+        name TEXT NOT NULL
       );
     `);
   }
@@ -433,6 +455,102 @@ export async function setPantryChecked(
 
 export async function clearPantry(db: SQLiteDatabase): Promise<void> {
   await db.runAsync('UPDATE pantry SET checked = 0');
+}
+
+/**
+ * The grocery list: every recipe ingredient not ticked in the pantry, plus
+ * anything added by hand. Ticking an ingredient in the pantry takes it off;
+ * unticking puts it back.
+ */
+export async function listGrocery(db: SQLiteDatabase): Promise<GroceryItem[]> {
+  const rows = await db.getAllAsync<{
+    name_key: string;
+    name: string;
+    recipe_count: number;
+    manual: number;
+    missing: number;
+  }>(
+    `WITH missing AS (
+       SELECT DISTINCT ri.name_key FROM recipe_ingredients ri
+         LEFT JOIN pantry p ON p.name_key = ri.name_key
+        WHERE COALESCE(p.checked, 0) = 0
+     ),
+     keys AS (
+       SELECT name_key FROM missing
+       UNION
+       SELECT name_key FROM grocery
+     )
+     SELECT k.name_key,
+            COALESCE(
+              g.name,
+              (SELECT r2.name FROM recipe_ingredients r2
+                WHERE r2.name_key = k.name_key ORDER BY r2.id DESC LIMIT 1)
+            ) AS name,
+            (SELECT COUNT(DISTINCT r3.recipe_id) FROM recipe_ingredients r3
+              WHERE r3.name_key = k.name_key) AS recipe_count,
+            g.name_key IS NOT NULL AS manual,
+            k.name_key IN (SELECT name_key FROM missing) AS missing
+       FROM keys k
+       LEFT JOIN grocery g ON g.name_key = k.name_key
+      ORDER BY name COLLATE NOCASE`
+  );
+
+  return rows.map((row) => ({
+    nameKey: row.name_key,
+    name: row.name,
+    recipeCount: row.recipe_count,
+    manual: row.manual === 1,
+    missing: row.missing === 1,
+  }));
+}
+
+/** Adding something the pantry already has still lists it: it may just be running low. */
+export async function addGroceryItem(db: SQLiteDatabase, rawName: string): Promise<void> {
+  const name = rawName.trim();
+  if (name === '') return;
+  await db.runAsync(
+    `INSERT INTO grocery (name_key, name) VALUES (?, ?)
+     ON CONFLICT(name_key) DO UPDATE SET name = excluded.name`,
+    normalizeName(name),
+    name
+  );
+}
+
+export async function removeGroceryItem(db: SQLiteDatabase, nameKey: string): Promise<void> {
+  await db.runAsync('DELETE FROM grocery WHERE name_key = ?', nameKey);
+}
+
+/**
+ * Ticking an item off takes it off the list and ticks the ingredient of the same
+ * name in the pantry, if a recipe uses one — buying it means having it.
+ */
+export async function tickGroceryItem(db: SQLiteDatabase, nameKey: string): Promise<void> {
+  await db.withTransactionAsync(async () => {
+    await db.runAsync('DELETE FROM grocery WHERE name_key = ?', nameKey);
+    await db.runAsync(
+      `INSERT INTO pantry (name_key, checked)
+       SELECT ?, 1 WHERE EXISTS (SELECT 1 FROM recipe_ingredients WHERE name_key = ?)
+       ON CONFLICT(name_key) DO UPDATE SET checked = 1`,
+      nameKey,
+      nameKey
+    );
+  });
+}
+
+/** Undoes `tickGroceryItem`, given the item as it was listed before the tick. */
+export async function restoreGroceryItem(db: SQLiteDatabase, item: GroceryItem): Promise<void> {
+  await db.withTransactionAsync(async () => {
+    if (item.manual) {
+      await db.runAsync(
+        'INSERT OR IGNORE INTO grocery (name_key, name) VALUES (?, ?)',
+        item.nameKey,
+        item.name
+      );
+    }
+    if (item.missing) {
+      await db.runAsync('UPDATE pantry SET checked = 0 WHERE name_key = ?', item.nameKey);
+    }
+  });
 }
 
 export type Stats = {

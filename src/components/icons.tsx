@@ -190,6 +190,25 @@ export function ChecklistIcon({ size = 23, color }: IconProps) {
   );
 }
 
+export function BagIcon({ size = 23, color }: IconProps) {
+  return (
+    <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+      <Path
+        d="M5.2 8h13.6l-1 11.2a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8L5.2 8z"
+        stroke={color}
+        strokeWidth={STROKE}
+        strokeLinejoin="round"
+      />
+      <Path
+        d="M9 10.5V7a3 3 0 0 1 6 0v3.5"
+        stroke={color}
+        strokeWidth={STROKE}
+        strokeLinecap="round"
+      />
+    </Svg>
+  );
+}
+
 /** Round tick used in the recipe detail's ingredient list. */
 export function CheckCircle({ size = 20, color, filled }: IconProps & { filled: boolean }) {
   if (!filled) {
