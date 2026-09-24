@@ -3,7 +3,7 @@
 EasyRecipes is an offline Android recipe app: Expo + React Native (expo-router),
 everything in local SQLite. No account, no server, no network calls at runtime.
 One developer, tested by hand on a physical phone through Expo Go. There is no
-test runner and no CI.
+test runner. CI only builds: see "Release builds" below.
 
 ## Read first: the SDK 57 pin
 
@@ -65,6 +65,22 @@ changes, say they weren't exercised on device rather than implying they work.
 - **The bundle compiling under the dev server.** With `expo start` running, fetch
   `http://127.0.0.1:8081/` with header `expo-platform: android`. The manifest gives
   `runtimeVersion` (should be `exposdk:57.0.0`) and the `launchAsset.url` to request.
+
+## Release builds
+
+`.github/workflows/android-build.yml` runs on every push to `master` (a merged PR
+counts). It runs `tsc` and `lint`, then `expo prebuild` and a Gradle
+`assembleRelease` on the runner, not on EAS, so it needs no secrets. The APK is
+published as a GitHub Release named `build-<run number>`.
+
+- It's signed with the debug keystore that prebuild's template ships. The key is
+  the same on every run, so builds install over each other, but it can't go to
+  the Play Store.
+- `versionCode` is the run number, patched into the generated `build.gradle`,
+  because prebuild hardcodes app.json's value and Gradle can't override it.
+- Only `arm64-v8a` is compiled.
+- A standalone build does read `app.json`'s `android` block, unlike Expo Go. Native
+  config that "did nothing" on the phone can matter in these builds.
 
 ## Where things live
 
